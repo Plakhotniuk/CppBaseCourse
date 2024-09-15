@@ -1,8 +1,0 @@
-/Users/arseniy/study/Магистратура/1 семестр/CppBase/repo/CppBaseCourse/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/arseniy/study/Магистратура/1 семестр/CppBase/repo/CppBaseCourse/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/arseniy/study/Магистратура/1 семестр/CppBase/repo/CppBaseCourse/cmake-build-debug/src/CMakeFiles/CppBaseCourse.dir
-/Users/arseniy/study/Магистратура/1 семестр/CppBase/repo/CppBaseCourse/cmake-build-debug/src/CMakeFiles/edit_cache.dir
-/Users/arseniy/study/Магистратура/1 семестр/CppBase/repo/CppBaseCourse/cmake-build-debug/src/CMakeFiles/rebuild_cache.dir
-/Users/arseniy/study/Магистратура/1 семестр/CppBase/repo/CppBaseCourse/cmake-build-debug/tests/CMakeFiles/run_test_cache.dir
-/Users/arseniy/study/Магистратура/1 семестр/CppBase/repo/CppBaseCourse/cmake-build-debug/tests/CMakeFiles/edit_cache.dir
-/Users/arseniy/study/Магистратура/1 семестр/CppBase/repo/CppBaseCourse/cmake-build-debug/tests/CMakeFiles/rebuild_cache.dir
