@@ -19,4 +19,19 @@ TEST(TestLRU, Test1) {
     }
     ASSERT_EQ(hits, 6);
 }
+
+
+TEST(TestLRU, Test2) {
+    int hits = 0;
+    const size_t m = 4;
+    caches::cache_lru<int> c{m};
+
+    const std::vector<int> input{1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2};
+    const size_t vec_size = input.size();
+    for (int i = 0; i < vec_size; ++i) {
+        if (c.lookup_update(input[i], slow_get_page_int))
+            hits += 1;
+    }
+    ASSERT_EQ(hits, 0);
+}
 }

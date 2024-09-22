@@ -5,14 +5,13 @@
 namespace caches {
 
 template<typename T, typename KeyT = int>
-struct cache_2q {
-private:
+class cache_2q {
     size_t a1_sz_;
     cache_lru<T, KeyT> am_;
 
 public:
-    std::list<std::pair<KeyT, T>> a1_cache_;
-    using ListIt = typename std::list<std::pair<KeyT, T>>::iterator;
+    std::list<std::pair<KeyT, T> > a1_cache_;
+    using ListIt = typename std::list<std::pair<KeyT, T> >::iterator;
     std::unordered_map<KeyT, ListIt> a1_hash_;
 
     cache_2q(const size_t size_am, const size_t size_a1) : am_(size_am), a1_sz_(size_a1) {};
