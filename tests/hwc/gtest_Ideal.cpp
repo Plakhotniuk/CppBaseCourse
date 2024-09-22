@@ -1,39 +1,24 @@
 #include "src/CppBaseCourse/hwc/Ideal.h"
+#include "tests/data/hwc/IdealTestingData.h"
 #include "gtest/gtest.h"
 
 namespace {
-// slow get page imitation
-int slow_get_page_int(int key) { return key; }
 
+class CacheIdealTestingData : public ::testing::TestWithParam<cache_ideal_testing::CacheIdealTestingData> {};
 
-TEST(TestIdeal, Test1) {
+TEST_P(CacheIdealTestingData, HitsCount) {
+    const auto params = GetParam();
+    caches::cache_ideal<int> c{params.cache_size_};
+    const size_t vec_size = params.input_.size();
     int hits = 0;
-    const size_t m = 4;
-    caches::cache_ideal<int> c{m};
-
-    const std::vector<int> input{1, 2, 3, 4, 1, 2, 5, 1, 2, 4, 3, 4};
-    const size_t vec_size = input.size();
     for (int i = 0; i < vec_size; ++i) {
-        if (c.lookup_update(input[i], slow_get_page_int, input, i))
+        if (c.lookup_update(params.input_[i], cache_ideal_testing::slow_get_page_int, params.input_, i))
             hits += 1;
     }
-    ASSERT_EQ(hits, 6);
+    ASSERT_EQ(hits, params.hits_);
 }
 
-TEST(TestLRU, Test2) {
-    int hits = 0;
-    const size_t m = 4;
-    caches::cache_ideal<int> c{m};
-
-    const std::vector<int> input{1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2};
-    const size_t vec_size = input.size();
-    for (int i = 0; i < vec_size; ++i) {
-        if (c.lookup_update(input[i], slow_get_page_int, input, i))
-            hits += 1;
-    }
-    ASSERT_EQ(hits, 5);
-}
-
+INSTANTIATE_TEST_SUITE_P(IdealCacheTestingdata, CacheIdealTestingData, ::testing::ValuesIn(cache_ideal_testing::refData));
 }
 
 

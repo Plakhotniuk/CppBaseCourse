@@ -3,7 +3,7 @@
 #include "LRU.h"
 
 namespace caches {
-
+// Link to implemented 2Q algorithm: https://arpitbhayani.me/blogs/2q-cache/
 template<typename T, typename KeyT = int>
 class cache_2q {
     size_t a1_sz_;
@@ -13,7 +13,7 @@ public:
     using ListIt = typename std::list<std::pair<KeyT, T> >::iterator;
     std::unordered_map<KeyT, ListIt> a1_hash_;
 
-    cache_2q(const size_t size_am, const size_t size_a1) : am_(size_am), a1_sz_(size_a1) {};
+    cache_2q(const size_t size) : am_(size), a1_sz_(size) {};
 
     bool full() const { return (a1_cache_.size() == a1_sz_); }
 
