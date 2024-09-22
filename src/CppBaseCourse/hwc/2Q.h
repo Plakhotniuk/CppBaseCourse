@@ -7,9 +7,8 @@ namespace caches {
 template<typename T, typename KeyT = int>
 class cache_2q {
     size_t a1_sz_;
-    cache_lru<T, KeyT> am_;
-
 public:
+    cache_lru<T, KeyT> am_;
     std::list<std::pair<KeyT, T> > a1_cache_;
     using ListIt = typename std::list<std::pair<KeyT, T> >::iterator;
     std::unordered_map<KeyT, ListIt> a1_hash_;
@@ -23,9 +22,7 @@ public:
         // Search in AM cache
         auto hit_am = am_.hash_.find(key);
         if (hit_am != am_.hash_.end()) {
-            auto eltit = hit_am->second;
-            if (eltit != am_.cache_.begin())
-                am_.cache_.splice(am_.cache_.begin(), am_.cache_, eltit, std::next(eltit));
+            am_.move_to_front(hit_am->second);
             return true;
         }
         // Search in A1 queue
@@ -42,11 +39,9 @@ public:
         }
         // Move from A1 queue to AM cache
         if (am_.full()) {
-            am_.hash_.erase(am_.cache_.back().first);
-            am_.cache_.pop_back();
+            am_.remove_from_back();
         }
-        am_.cache_.emplace_front(key, hit_a1->second->second);
-        am_.hash_.emplace(key, am_.cache_.begin());
+        am_.add_front(key, slow_get_page);
         a1_cache_.erase(hit_a1->second);
         a1_hash_.erase(hit_a1);
         return true;

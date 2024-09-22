@@ -19,21 +19,33 @@ public:
     bool full() const { return (cache_.size() == sz_); }
 
     template<typename F>
+    void add_front(KeyT key, F slow_get_page) {
+        cache_.emplace_front(key, slow_get_page(key));
+        hash_.emplace(key, cache_.begin());
+    }
+
+    void remove_from_back() {
+        hash_.erase(cache_.back().first);
+        cache_.pop_back();
+    }
+
+    void move_to_front(ListIt eltit){
+        if (eltit != cache_.begin())
+            cache_.splice(cache_.begin(), cache_, eltit, std::next(eltit));
+    }
+
+    template<typename F>
     bool lookup_update(KeyT key, F slow_get_page) {
         auto hit = hash_.find(key);
         if (hit == hash_.end()) {
             if (full()) {
-                hash_.erase(cache_.back().first);
-                cache_.pop_back();
+                remove_from_back();
             }
-            cache_.emplace_front(key, slow_get_page(key));
-            hash_.emplace(key, cache_.begin());
+            add_front(key, slow_get_page);
             return false;
         }
 
-        auto eltit = hit->second;
-        if (eltit != cache_.begin())
-            cache_.splice(cache_.begin(), cache_, eltit, std::next(eltit));
+        move_to_front(hit->second);
         return true;
     }
 };
