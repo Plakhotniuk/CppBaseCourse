@@ -20,6 +20,11 @@ public:
 
     bool full() const { return (cache_.size() == sz_); }
 
+    void move_to_front(ListIt eltit){
+        if (eltit != cache_.begin())
+            cache_.splice(cache_.begin(), cache_, eltit, std::next(eltit));
+    }
+
     template<typename F>
     bool lookup_update(KeyT key, F slow_get_page, const std::vector<KeyT> &future_refs, int current_pos) {
         auto hit = hash_.find(key);
@@ -33,6 +38,7 @@ public:
             return false;
         }
 
+        move_to_front(hit->second);
         return true;
     }
 

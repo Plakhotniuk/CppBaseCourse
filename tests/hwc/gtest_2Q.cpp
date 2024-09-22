@@ -8,7 +8,7 @@ class Cache2QTestingData : public ::testing::TestWithParam<cache_2q_testing::Cac
 
 TEST_P(Cache2QTestingData, HitsCount) {
     const auto params = GetParam();
-    caches::cache_lru<int> c{params.cache_size_};
+    caches::cache_2q<int> c{params.cache_size_};
     const size_t vec_size = params.input_.size();
     int hits = 0;
     for (int i = 0; i < vec_size; ++i) {
@@ -18,7 +18,7 @@ TEST_P(Cache2QTestingData, HitsCount) {
     ASSERT_EQ(hits, params.hits_);
 }
 
-INSTANTIATE_TEST_SUITE_P(LRUCacheTestingdata, Cache2QTestingData, ::testing::ValuesIn(cache_2q_testing::refData));
+INSTANTIATE_TEST_SUITE_P(Cache2QTestingData, Cache2QTestingData, ::testing::ValuesIn(cache_2q_testing::refData));
 }
 
 

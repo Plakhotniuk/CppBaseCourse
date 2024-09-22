@@ -12,7 +12,7 @@ struct CacheLRUTestingData {
     size_t hits_;
 };
 
-CacheLRUTestingData refData[2] = {
+CacheLRUTestingData refData[3] = {
         {
                 .cache_size_=4,
                 .input_={1, 2, 3, 4, 1, 2, 5, 1, 2, 4, 3, 4},
@@ -22,6 +22,11 @@ CacheLRUTestingData refData[2] = {
                 .cache_size_=4,
                 .input_={1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2},
                 .hits_=0
+        },
+        {
+                .cache_size_=4,
+                .input_={1, 1, 2, 1, 3, 2, 5, 6, 1, 4, 3, 5, 7, 1},
+                .hits_=3
         }
 };
 }

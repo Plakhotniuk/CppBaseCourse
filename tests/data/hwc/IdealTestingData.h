@@ -12,7 +12,7 @@ struct CacheIdealTestingData {
     size_t hits_;
 };
 
-CacheIdealTestingData refData[2] = {
+CacheIdealTestingData refData[3] = {
         {
                 .cache_size_=4,
                 .input_={1, 2, 3, 4, 1, 2, 5, 1, 2, 4, 3, 4},
@@ -22,6 +22,11 @@ CacheIdealTestingData refData[2] = {
                 .cache_size_=4,
                 .input_={1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2},
                 .hits_=5
+        },
+        {
+                .cache_size_=4,
+                .input_={1, 1, 2, 1, 3, 2, 5, 6, 1, 4, 3, 5, 7, 1},
+                .hits_=7
         }
 };
 }

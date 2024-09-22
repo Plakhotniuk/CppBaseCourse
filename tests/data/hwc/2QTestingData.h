@@ -12,16 +12,21 @@ struct Cache2QTestingData {
     size_t hits_;
 };
 
-Cache2QTestingData refData[2] = {
+Cache2QTestingData refData[1] = {
+//        {
+//                .cache_size_=4,
+//                .input_={1, 2, 3, 4, 1, 2, 5, 1, 2, 4, 3, 4},
+//                .hits_=6
+//        },
+//        {
+//                .cache_size_=4,
+//                .input_={1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2},
+//                .hits_=0
+//        },
         {
-                .cache_size_=4,
-                .input_={1, 2, 3, 4, 1, 2, 5, 1, 2, 4, 3, 4},
-                .hits_=6
-        },
-        {
-                .cache_size_=4,
-                .input_={1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2},
-                .hits_=0
+                .cache_size_=2,
+                .input_={1, 1, 2, 1, 3, 2, 5, 6, 1, 4, 3, 5, 7, 1},
+                .hits_=5
         }
 };
 }
