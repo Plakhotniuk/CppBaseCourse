@@ -8,7 +8,7 @@ inline std::vector<testing_caches::CacheTestingData> refData = {
     {
         .testCaseName_ = "case1",
         .cacheSize_ = 2,
-        .input_ = {1, 2, 3, 2},
+        .input_ = {1, 2, 3, 1},
         .hits_ = 1
     },
     {
