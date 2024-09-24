@@ -25,6 +25,15 @@ public:
             cache_.splice(cache_.begin(), cache_, eltit, std::next(eltit));
     }
 
+    void remove_elem(KeyT key)
+    {
+        auto remove_it = hash_.find(key);
+        if (remove_it != hash_.end()) {
+            cache_.erase(remove_it->second);
+            hash_.erase(remove_it);
+        }
+    }
+
     template<typename F>
     bool lookup_update(KeyT key, F slow_get_page, const std::vector<KeyT> &future_refs, int current_pos) {
         auto hit = hash_.find(key);
@@ -52,17 +61,18 @@ private:
             KeyT cached_key = item.first;
             int next_occurrence = find_next_occurrence(future_refs, cached_key, current_pos);
 
-            if (next_occurrence == -1 || next_occurrence > farthest_in_future) {
+            if (next_occurrence == -1)
+            {
+                key_to_evict = cached_key;
+                break;
+            }
+            if (next_occurrence > farthest_in_future) {
                 farthest_in_future = next_occurrence;
                 key_to_evict = cached_key;
             }
         }
 
-        auto evict_it = hash_.find(key_to_evict);
-        if (evict_it != hash_.end()) {
-            cache_.erase(evict_it->second);
-            hash_.erase(evict_it);
-        }
+        remove_elem(key_to_evict);
     }
 
     int find_next_occurrence(const std::vector<KeyT> &future_refs, KeyT key, int current_pos) {
