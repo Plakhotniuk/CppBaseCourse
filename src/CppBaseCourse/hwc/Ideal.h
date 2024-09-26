@@ -21,20 +21,6 @@ public:
 
     bool full() const { return (cache_.size() == sz_); }
 
-    void move_to_front(const ListIt eltit){
-        if (eltit != cache_.begin())
-            cache_.splice(cache_.begin(), cache_, eltit, std::next(eltit));
-    }
-
-    void remove_elem(const KeyT key)
-    {
-        auto remove_it = hash_.find(key);
-        if (remove_it != hash_.end()) {
-            cache_.erase(remove_it->second);
-            hash_.erase(remove_it);
-        }
-    }
-
     template<typename F>
     bool lookup_update(const KeyT key, F slow_get_page, const std::vector<KeyT> &future_refs, const int current_pos) {
         const auto hit = hash_.find(key);
@@ -48,7 +34,9 @@ public:
             return false;
         }
 
-        move_to_front(hit->second);
+        const auto eltit = hit->second;
+        if (eltit != cache_.begin())
+            cache_.splice(cache_.begin(), cache_, eltit, std::next(eltit));
         return true;
     }
 
@@ -75,7 +63,11 @@ private:
             }
         }
 
-        remove_elem(key_to_evict);
+        auto remove_it = hash_.find(key_to_evict);
+        if (remove_it != hash_.end()) {
+            cache_.erase(remove_it->second);
+            hash_.erase(remove_it);
+        }
     }
 
     int find_next_occurrence(const std::vector<KeyT> &future_refs, const KeyT key, const int current_pos) {

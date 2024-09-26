@@ -4,6 +4,28 @@
 #include "tests/utils/utils.h"
 
 namespace {
+
+TEST(IdealCacheTest, EndToEnd){
+    caches::cache_ideal<int> c{2};
+    const std::vector<int> input = {1, 2, 3, 1};
+    bool hit;
+    hit = c.lookup_update(input[0], testing_caches::slow_get_page_int, input, 0);
+    ASSERT_TRUE(!hit);
+
+    ASSERT_TRUE(!c.full());
+
+    hit = c.lookup_update(input[1], testing_caches::slow_get_page_int, input, 1);
+    ASSERT_TRUE(!hit);
+
+    ASSERT_TRUE(c.full());
+
+    hit = c.lookup_update(input[2], testing_caches::slow_get_page_int, input, 2);
+    ASSERT_TRUE(!hit);
+
+    hit = c.lookup_update(input[3], testing_caches::slow_get_page_int, input, 3);
+    ASSERT_TRUE(hit);
+}
+
 class CacheIdealTestingData : public ::testing::TestWithParam<testing_caches::CacheTestingData> {};
 
 TEST_P(CacheIdealTestingData, HitsCount)

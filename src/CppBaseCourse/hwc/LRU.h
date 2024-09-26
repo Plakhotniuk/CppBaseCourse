@@ -16,38 +16,26 @@ public:
     std::list<std::pair<KeyT, T> > cache_;
     std::unordered_map<KeyT, ListIt> hash_;
 
-    cache_lru(size_t sz) : sz_(sz) {}
+    cache_lru(const size_t sz) : sz_(sz) {}
 
     bool full() const { return (cache_.size() == sz_); }
 
     template<typename F>
-    void add_front(KeyT key, F slow_get_page) {
-        cache_.emplace_front(key, slow_get_page(key));
-        hash_.emplace(key, cache_.begin());
-    }
-
-    void remove_from_back() {
-        hash_.erase(cache_.back().first);
-        cache_.pop_back();
-    }
-
-    void move_to_front(ListIt eltit){
-        if (eltit != cache_.begin())
-            cache_.splice(cache_.begin(), cache_, eltit, std::next(eltit));
-    }
-
-    template<typename F>
-    bool lookup_update(KeyT key, F slow_get_page) {
-        auto hit = hash_.find(key);
+    bool lookup_update(const KeyT key, F slow_get_page) {
+        const auto hit = hash_.find(key);
         if (hit == hash_.end()) {
             if (full()) {
-                remove_from_back();
+                hash_.erase(cache_.back().first);
+                cache_.pop_back();
             }
-            add_front(key, slow_get_page);
+            cache_.emplace_front(key, slow_get_page(key));
+            hash_.emplace(key, cache_.begin());
             return false;
         }
 
-        move_to_front(hit->second);
+        const ListIt eltit = hit->second;
+        if (eltit != cache_.begin())
+            cache_.splice(cache_.begin(), cache_, eltit, std::next(eltit));
         return true;
     }
 };

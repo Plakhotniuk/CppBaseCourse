@@ -4,6 +4,34 @@
 #include "tests/utils/utils.h"
 
 namespace {
+
+TEST(Cache2QTest, EndToEnd){
+    caches::cache_2q<int> c{2};
+    const std::vector<int> input = {1, 1, 2, 3, 1, 2};
+    bool hit;
+    hit = c.lookup_update(input[0], testing_caches::slow_get_page_int);
+    ASSERT_TRUE(!hit);
+
+    ASSERT_TRUE(!c.full());
+
+    hit = c.lookup_update(input[1], testing_caches::slow_get_page_int);
+    ASSERT_TRUE(hit);
+
+    hit = c.lookup_update(input[2], testing_caches::slow_get_page_int);
+    ASSERT_TRUE(!hit);
+
+    hit = c.lookup_update(input[3], testing_caches::slow_get_page_int);
+    ASSERT_TRUE(!hit);
+
+    ASSERT_TRUE(c.full());
+
+    hit = c.lookup_update(input[4], testing_caches::slow_get_page_int);
+    ASSERT_TRUE(hit);
+
+    hit = c.lookup_update(input[5], testing_caches::slow_get_page_int);
+    ASSERT_TRUE(hit);
+}
+
 class Cache2QTestingData : public ::testing::TestWithParam<testing_caches::CacheTestingData> {};
 
 TEST_P(Cache2QTestingData, HitsCount)
