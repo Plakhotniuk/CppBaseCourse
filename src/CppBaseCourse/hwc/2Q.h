@@ -3,10 +3,12 @@
 #include "LRU.h"
 
 namespace caches {
-// Link to implemented 2Q algorithm: https://arpitbhayani.me/blogs/2q-cache/
+// Implemented 2Q algorithm: https://arpitbhayani.me/blogs/2q-cache/
 template<typename T, typename KeyT = int>
 class cache_2q {
+
     size_t a1_sz_;
+
 public:
     cache_lru<T, KeyT> am_;
     std::list<std::pair<KeyT, T> > a1_cache_;

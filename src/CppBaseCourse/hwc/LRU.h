@@ -8,10 +8,12 @@ namespace caches {
 
 template<typename T, typename KeyT = int>
 class cache_lru {
+
     size_t sz_;
+
 public:
-    std::list<std::pair<KeyT, T> > cache_;
     using ListIt = typename std::list<std::pair<KeyT, T> >::iterator;
+    std::list<std::pair<KeyT, T> > cache_;
     std::unordered_map<KeyT, ListIt> hash_;
 
     cache_lru(size_t sz) : sz_(sz) {}
