@@ -17,8 +17,6 @@ public:
 
     cache_2q(const size_t size) : am_(size), a1_sz_(size) {};
 
-    bool full() const { return (a1_cache_.size() == a1_sz_); }
-
     template<typename F>
     bool lookup_update(const KeyT key, F slow_get_page) {
         // Search in AM cache
@@ -32,7 +30,7 @@ public:
         // Search in A1 queue
         const auto hit_a1 = a1_hash_.find(key);
         if (hit_a1 == a1_hash_.end()) {
-            if (full()) {
+            if (a1_full()) {
                 a1_hash_.erase(a1_cache_.front().first);
                 a1_cache_.pop_front();
             }
@@ -52,5 +50,7 @@ public:
         a1_hash_.erase(hit_a1);
         return true;
     }
+private:
+    bool a1_full() const { return (a1_cache_.size() == a1_sz_); }
 };
 }

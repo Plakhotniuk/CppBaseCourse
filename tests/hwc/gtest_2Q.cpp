@@ -12,8 +12,6 @@ TEST(Cache2QTest, EndToEnd){
     hit = c.lookup_update(input[0], testing_caches::slow_get_page_int);
     ASSERT_TRUE(!hit);
 
-    ASSERT_TRUE(!c.full());
-
     hit = c.lookup_update(input[1], testing_caches::slow_get_page_int);
     ASSERT_TRUE(hit);
 
@@ -22,8 +20,6 @@ TEST(Cache2QTest, EndToEnd){
 
     hit = c.lookup_update(input[3], testing_caches::slow_get_page_int);
     ASSERT_TRUE(!hit);
-
-    ASSERT_TRUE(c.full());
 
     hit = c.lookup_update(input[4], testing_caches::slow_get_page_int);
     ASSERT_TRUE(hit);
