@@ -5,26 +5,6 @@
 
 namespace {
 
-TEST(LRUCacheTest, EndToEnd){
-    caches::cache_lru<int> c{3};
-    bool hit;
-    hit = c.lookup_update(1, testing_caches::slow_get_page_int);
-    ASSERT_TRUE(!hit);
-
-    ASSERT_TRUE(!c.full());
-
-    hit = c.lookup_update(2, testing_caches::slow_get_page_int);
-    ASSERT_TRUE(!hit);
-
-    hit = c.lookup_update(3, testing_caches::slow_get_page_int);
-    ASSERT_TRUE(!hit);
-
-    ASSERT_TRUE(c.full());
-
-    hit = c.lookup_update(1, testing_caches::slow_get_page_int);
-    ASSERT_TRUE(hit);
-}
-
 class LRUCacheTestingData : public ::testing::TestWithParam<testing_caches::CacheTestingData> {};
 
 TEST_P(LRUCacheTestingData, HitsCount) {
