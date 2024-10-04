@@ -1,19 +1,29 @@
 **Instruction**
 
-1. compile .cc files with: 
+1. build with cmake from repository root directory: 
 
-    g++ *testcase_name*cc -o *binary_file_name*
+        mkdir build
 
-2. then run using command:
+        cd build
 
-    ./*binary_file_name*
+        cmake -DCMAKE_BUILD_TYPE=debug ..
 
-3. input: 
+        make
 
-    cache_size sequence_length
+2. run e2e tests:
 
-    page_num_sequence 
+        ./tests/run_*case_name* 
 
-4. output:
+        input: 
+        
+            cache_size sequence_length
 
-    num_of_hits
+            page_num_sequence 
+        
+        output:
+
+            num_of_hits
+
+3. run unit gtests: 
+
+        ./tests/run_gtest* 
