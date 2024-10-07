@@ -1,58 +1,74 @@
 #pragma once
 
-#include "LRU.h"
+#include<iostream>
+#include <iterator>
+#include <list>
+#include <unordered_map>
 
 namespace caches {
+
 // Implemented 2Q algorithm: https://arpitbhayani.me/blogs/2q-cache/
+
+struct cache_2q_utils {
+
+const static int mult_num = 2;
+const static int mult_denum = 5;
+
+};
+
+
 template<typename T, typename KeyT = int>
 class cache_2q {
-
-    size_t a1_sz_;
-
 public:
-    cache_lru<T, KeyT> am_;
-    std::list<std::pair<KeyT, T> > a1_cache_;
     using ListIt = typename std::list<std::pair<KeyT, T> >::iterator;
-    std::unordered_map<KeyT, ListIt> a1_hash_;
+    std::list<std::pair<KeyT, T> > cache_hot_;
+    std::unordered_map<KeyT, ListIt> hash_hot_;
+    std::list<std::pair<KeyT, T> > cache_cold_;
+    std::unordered_map<KeyT, ListIt> hash_cold_;
 
-    cache_2q(const size_t size) : am_((size + 1) / 2), a1_sz_(size - (size + 1) / 2) {
-        if(size == 1){ a1_sz_ = 1; }
-    };
+    cache_2q(const size_t size): hot_sz_(size * cache_2q_utils::mult_num / cache_2q_utils::mult_denum),
+                                 cold_sz_(size - size * cache_2q_utils::mult_num / cache_2q_utils::mult_denum) {};
 
     template<typename F>
     bool lookup_update(const KeyT key, F slow_get_page) {
-        // Search in AM cache
-        const auto hit_am = am_.hash_.find(key);
-        if (hit_am != am_.hash_.end()) {
-            const auto eltit = hit_am->second;
-            if (eltit != am_.cache_.begin())
-                am_.cache_.splice(am_.cache_.begin(), am_.cache_, eltit, std::next(eltit));
+        // Search in hot lru cache
+        const auto hit_hot = hash_hot_.find(key);
+        if (hit_hot != hash_hot_.end()) {
+            const auto eltit = hit_hot->second;
+            if (eltit != cache_hot_.begin())
+                cache_hot_.splice(cache_hot_.begin(), cache_hot_, eltit, std::next(eltit));
             return true;
         }
-        // Search in A1 queue
-        const auto hit_a1 = a1_hash_.find(key);
-        if (hit_a1 == a1_hash_.end()) {
-            if (a1_full()) {
-                a1_hash_.erase(a1_cache_.front().first);
-                a1_cache_.pop_front();
+        // Search in cold queue
+        const auto hit_cold = hash_cold_.find(key);
+        if (hit_cold == hash_cold_.end()) {
+            if (full_cold()) {
+                hash_cold_.erase(cache_cold_.front().first);
+                cache_cold_.pop_front();
             }
-            a1_cache_.emplace_back(key, slow_get_page(key));
-            auto it = std::prev(a1_cache_.end());
-            a1_hash_.emplace(key, it);
+            cache_cold_.emplace_back(key, slow_get_page(key));
+            auto it = std::prev(cache_cold_.end());
+            hash_cold_.emplace(key, it);
             return false;
         }
-        // Move from A1 queue to AM cache
-        if (am_.full()) {
-            am_.hash_.erase(am_.cache_.back().first);
-            am_.cache_.pop_back();
+        // Move from cold queue to hot cache
+        if (full_hot()) {
+            hash_hot_.erase(cache_hot_.back().first);
+            cache_hot_.pop_back();
         }
-        am_.cache_.emplace_front(key, slow_get_page(key));
-        am_.hash_.emplace(key, am_.cache_.begin());
-        a1_cache_.erase(hit_a1->second);
-        a1_hash_.erase(hit_a1);
+        cache_hot_.emplace_front(key, slow_get_page(key));
+        hash_hot_.emplace(key, cache_hot_.begin());
+        cache_cold_.erase(hit_cold->second);
+        hash_cold_.erase(hit_cold);
         return true;
     }
+
 private:
-    bool a1_full() const { return (a1_cache_.size() == a1_sz_); }
+    bool full_hot() const { return (cache_hot_.size() == hot_sz_); }
+    bool full_cold() const { return (cache_cold_.size() == cold_sz_); }
+
+private:
+    size_t hot_sz_;
+    size_t cold_sz_;
 };
 }
