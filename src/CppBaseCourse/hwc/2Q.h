@@ -15,7 +15,9 @@ public:
     using ListIt = typename std::list<std::pair<KeyT, T> >::iterator;
     std::unordered_map<KeyT, ListIt> a1_hash_;
 
-    cache_2q(const size_t size) : am_(size), a1_sz_(size) {};
+    cache_2q(const size_t size) : am_((size + 1) / 2), a1_sz_(size - (size + 1) / 2) {
+        if(size == 1){ a1_sz_ = 1; }
+    };
 
     template<typename F>
     bool lookup_update(const KeyT key, F slow_get_page) {
