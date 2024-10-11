@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <vector>
 #include <algorithm>
+#include <optional>
 
 namespace caches {
 
@@ -27,7 +28,15 @@ public:
 
         if (hit == hash_.end()) {
             if (full()) {
-                evict(future_refs, current_pos);
+                auto key_to_evict = evict(future_refs, current_pos, key);
+                if (!key_to_evict.has_value()) {
+                    slow_get_page(key);
+                    return false;
+                }
+                if (auto remove_it = hash_.find(key_to_evict.value()); remove_it != hash_.end()) {
+                    cache_.erase(remove_it->second);
+                    hash_.erase(remove_it);
+                }
             }
             cache_.emplace_front(key, slow_get_page(key));
             hash_.emplace(key, cache_.begin());
@@ -42,7 +51,7 @@ public:
 
 private:
 
-    void evict(const std::vector<KeyT> &future_refs, const int current_pos) {
+    std::optional<KeyT> evict(const std::vector<KeyT> &future_refs, const int current_pos, const KeyT new_key) {
         KeyT key_to_evict;
         KeyT cached_key;
         int farthest_in_future = -1;
@@ -52,8 +61,7 @@ private:
             cached_key = item.first;
             next_occurrence = find_next_occurrence(future_refs, cached_key, current_pos);
 
-            if (next_occurrence == -1)
-            {
+            if (next_occurrence == -1) {
                 key_to_evict = cached_key;
                 break;
             }
@@ -62,12 +70,12 @@ private:
                 key_to_evict = cached_key;
             }
         }
+        const int new_elem_next_occ = find_next_occurrence(future_refs, new_key, current_pos);
 
-        auto remove_it = hash_.find(key_to_evict);
-        if (remove_it != hash_.end()) {
-            cache_.erase(remove_it->second);
-            hash_.erase(remove_it);
+        if(new_elem_next_occ > farthest_in_future || new_elem_next_occ == -1) {
+            return std::nullopt;
         }
+        return key_to_evict;
     }
 
     int find_next_occurrence(const std::vector<KeyT> &future_refs, const KeyT key, const int current_pos) {
