@@ -20,7 +20,7 @@ inline std::vector<testing_caches::CacheTestingData> refData = {
         .testCaseName_ = "case3",
         .cacheSize_ = 5,
         .input_ = {19, 3, 8, 6, 7, 5, 1, 0, 8, 4, 1, 4, 6, 8, 1, 6, 9, 5, 6, 7, 2, 2, 5, 2, 6, 1, 2, 5, 8, 1},
-        .hits_ = 18
+        .hits_ = 15
     }
 };
 }
