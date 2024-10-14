@@ -1,0 +1,21 @@
+
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "LLDB Debug ARM64",
+        "type": "lldb", // Updated to use LLDB's native debugger in macOS
+        "request": "launch",
+        "program": "${workspaceFolder}/build/tests/run_cache_ideal", // Path to your compiled binary
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "preLaunchTask": "build",
+        "targetArchitecture": "arm64" // Specify ARM64 for M1 Mac
+      }
+    ]
+}
+  
+  
