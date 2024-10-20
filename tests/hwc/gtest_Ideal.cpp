@@ -2,6 +2,7 @@
 #include "tests/data/hwc/IdealTestingData.h"
 #include "gtest/gtest.h"
 #include "tests/utils/utils.h"
+#include <span>
 
 namespace {
 
@@ -12,12 +13,9 @@ TEST_P(CacheIdealTestingData, HitsCount)
     const auto params = GetParam();
     caches::cache_ideal<int> c{params.cacheSize_};
     const size_t vec_size = params.input_.size();
-    int hits = 0;
-    for (int i = 0; i < vec_size; ++i)
-    {
-        if (c.lookup_update(params.input_[i], testing_caches::slow_get_page_int, params.input_, i))
-            hits += 1;
-    }
+    std::span<const int> input_span(params.input_);
+    int hits = c.lookup_update<int (int)>(testing_caches::slow_get_page_int, input_span);
+
     ASSERT_EQ(hits, params.hits_);
 }
 

@@ -1,89 +1,85 @@
 #pragma once
 
-#include <list>
 #include <unordered_map>
 #include <vector>
 #include <algorithm>
-#include <optional>
+#include <span>
 
 namespace caches {
 
-template<typename T, typename KeyT = int>
+template<typename KeyT = int>
 class cache_ideal {
 
     size_t sz_;
+    std::vector<std::pair<KeyT, int> > dist_;
 
 public:
-    using ListIt = typename std::list<std::pair<KeyT, T> >::iterator;
-    std::list<std::pair<KeyT, T> > cache_;
-    std::unordered_map<KeyT, ListIt> hash_;
+    using VecIt = typename std::vector<std::pair<KeyT, int> >::iterator;
+    std::unordered_map<KeyT, VecIt> dist_hash_;
 
-    cache_ideal(const size_t sz) : sz_(sz) {}
+    cache_ideal(const size_t sz) : sz_(sz) {
+        dist_.reserve(sz);
+    }
 
-    bool full() const { return (cache_.size() == sz_); }
+    bool full() const { return dist_.size() == sz_; }
 
     template<typename F>
-    bool lookup_update(const KeyT key, F slow_get_page, const std::vector<KeyT> &future_refs, const int current_pos) {
-        const auto hit = hash_.find(key);
+    int lookup_update(F slow_get_page, std::span<const KeyT> keys_seq) {
+        int hits_count = 0;
+        const size_t seq_size = keys_seq.size();
+        int max_dist = seq_size;
 
-        if (hit == hash_.end()) {
-            if (full()) {
-                auto key_to_evict = evict(future_refs, current_pos, key);
-                if (!key_to_evict.has_value()) {
-                    slow_get_page(key);
-                    return false;
-                }
-                if (auto remove_it = hash_.find(key_to_evict.value()); remove_it != hash_.end()) {
-                    cache_.erase(remove_it->second);
-                    hash_.erase(remove_it);
-                }
+        for (size_t i = 0; i < seq_size; ++i) {
+
+            // Update the distances of cached items
+            for (auto& n : dist_) {
+                --n.second;
             }
-            cache_.emplace_front(key, slow_get_page(key));
-            hash_.emplace(key, cache_.begin());
-            return false;
+
+            auto hit = dist_hash_.find(keys_seq[i]);
+
+            const int next_occ = find_next_occurrence(keys_seq.subspan(i + 1, seq_size - i - 1), keys_seq[i], seq_size);
+            auto farthest_it = std::max_element(dist_.begin(), dist_.end(), CompareByDist{});
+            max_dist = farthest_it->second;
+
+            if (hit == dist_hash_.end()) {
+
+                if (full()) {
+                    if (next_occ > farthest_it->second) { continue; }
+
+                    dist_hash_.erase(farthest_it->first);
+                    dist_.erase(farthest_it);
+                }
+
+                dist_.emplace_back(keys_seq[i], next_occ);
+                dist_hash_[keys_seq[i]] = std::prev(dist_.end()); 
+            } else {
+                ++hits_count;
+                hit->second->second = next_occ;
+            }
         }
 
-        return true;
+        return hits_count;
     }
 
 private:
-
-    std::optional<KeyT> evict(const std::vector<KeyT> &future_refs, const int current_pos, const KeyT new_key) {
-        KeyT key_to_evict;
-        KeyT cached_key;
-        int farthest_in_future = -1;
-        int next_occurrence = -1;
-
-        for (const auto &item: cache_) {
-            cached_key = item.first;
-            next_occurrence = find_next_occurrence(future_refs, cached_key, current_pos);
-
-            if (next_occurrence == -1) {
-                key_to_evict = cached_key;
-                break;
+    // Find the next occurrence of the key in the future sequence
+    int find_next_occurrence(std::span<const KeyT> future_refs, const KeyT key, int max_size) {
+        int distance = 0;
+        for (const auto& elem : future_refs) {
+            if (elem == key) {
+                return distance;
             }
-            if (next_occurrence > farthest_in_future) {
-                farthest_in_future = next_occurrence;
-                key_to_evict = cached_key;
-            }
+            ++distance;
         }
-        const int new_elem_next_occ = find_next_occurrence(future_refs, new_key, current_pos);
-
-        if(new_elem_next_occ > farthest_in_future || new_elem_next_occ == -1) {
-            return std::nullopt;
-        }
-        return key_to_evict;
+        return max_size;
     }
 
-    int find_next_occurrence(const std::vector<KeyT> &future_refs, const KeyT key, const int current_pos) {
-        const int future_ref_size = future_refs.size();
-        for (int i = current_pos + 1; i < future_ref_size; ++i) {
-            if (future_refs[i] == key) {
-                return i;
-            }
+    struct CompareByDist {
+        bool operator()(const std::pair<KeyT, int>& a, const std::pair<KeyT, int>& b) const {
+            return a.second < b.second;
         }
-        return -1;
-    }
+    };
 };
 
-}
+}  // namespace caches
