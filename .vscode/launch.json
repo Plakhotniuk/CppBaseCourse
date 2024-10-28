@@ -6,7 +6,7 @@
         "name": "LLDB Debug ARM64",
         "type": "lldb", // Updated to use LLDB's native debugger in macOS
         "request": "launch",
-        "program": "${workspaceFolder}/build/tests/run_cache_ideal", // Path to your compiled binary
+        "program": "${workspaceFolder}/build/tests/run_ideal_cache_upd", // Path to your compiled binary
         "args": [],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}",

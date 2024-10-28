@@ -3,83 +3,95 @@
 #include <unordered_map>
 #include <vector>
 #include <algorithm>
-#include <span>
+#include <queue>
+#include <iostream>
 
 namespace caches {
 
-template<typename KeyT = int>
 class cache_ideal {
 
     size_t sz_;
-    std::vector<std::pair<KeyT, int> > dist_;
+    std::unordered_map<int, int> cache_;
 
 public:
-    using VecIt = typename std::vector<std::pair<KeyT, int> >::iterator;
-    std::unordered_map<KeyT, VecIt> dist_hash_;
 
-    cache_ideal(const size_t sz) : sz_(sz) {
-        dist_.reserve(sz);
-    }
+    cache_ideal(const size_t sz) : sz_(sz) {};
 
-    bool full() const { return dist_.size() == sz_; }
-
-    template<typename F>
-    int lookup_update(F slow_get_page, std::span<const KeyT> keys_seq) {
-        int hits_count = 0;
+    int lookup_update(const std::vector<int>& keys_seq) {
+        int hits = 0;
         const size_t seq_size = keys_seq.size();
-        int max_dist = seq_size;
+        std::cout << "Ideal cache running ...!" << std::endl;
+
+        std::unordered_map<int, std::queue<int>> map_of_indexes;
+
+        index_mapping(map_of_indexes, keys_seq);
 
         for (size_t i = 0; i < seq_size; ++i) {
-
-            // Update the distances of cached items
-            for (auto& n : dist_) {
-                --n.second;
+            int value = keys_seq[i];
+            if (!map_of_indexes[value].empty()) {
+                map_of_indexes[value].pop();
             }
-
-            auto hit = dist_hash_.find(keys_seq[i]);
-
-            const int next_occ = find_next_occurrence(keys_seq.subspan(i + 1, seq_size - i - 1), keys_seq[i], seq_size);
-            auto farthest_it = std::max_element(dist_.begin(), dist_.end(), CompareByDist{});
-            max_dist = farthest_it->second;
-
-            if (hit == dist_hash_.end()) {
-
-                if (full()) {
-                    if (next_occ > farthest_it->second) { continue; }
-
-                    dist_hash_.erase(farthest_it->first);
-                    dist_.erase(farthest_it);
-                }
-
-                dist_.emplace_back(keys_seq[i], next_occ);
-                dist_hash_[keys_seq[i]] = std::prev(dist_.end()); 
+            if (cache_.find(value) != cache_.end()) {
+                ++hits;
+                continue;
+            }
+            if (!full()) {
+                cache_[value] = 0; 
             } else {
-                ++hits_count;
-                hit->second->second = next_occ;
+                int curr_elem = find_farthest(value, map_of_indexes);
+
+                if (curr_elem == value) {
+                    continue;
+                }
+                cache_.erase(curr_elem);
+                cache_[value] = 0; 
             }
         }
 
-        return hits_count;
+        return hits;
     }
 
 private:
-    // Find the next occurrence of the key in the future sequence
-    int find_next_occurrence(std::span<const KeyT> future_refs, const KeyT key, int max_size) {
-        int distance = 0;
-        for (const auto& elem : future_refs) {
-            if (elem == key) {
-                return distance;
+
+    bool full() const { return cache_.size() == sz_; }
+
+    int find_farthest(int value, std::unordered_map<int, std::queue<int>>& map_of_indexes) {
+        int farthest_ind = -1;
+        int farthest_elem;
+
+        for (auto it = cache_.begin(); it != cache_.end(); ++it) {
+            int curr_elem = it->first;
+            std::queue<int> curr_list = map_of_indexes[curr_elem];
+
+            if (curr_list.empty()) {
+                return curr_elem;
             }
-            ++distance;
+
+            if (curr_list.front() > farthest_ind) {
+                farthest_ind = curr_list.front();
+                farthest_elem = curr_elem;
+            }
         }
-        return max_size;
+        
+        const std::queue<int> new_elem_list = map_of_indexes[value];
+
+        if (new_elem_list.empty() || new_elem_list.front() > farthest_ind) {
+            return value;
+        }
+
+        return farthest_elem;
     }
 
-    struct CompareByDist {
-        bool operator()(const std::pair<KeyT, int>& a, const std::pair<KeyT, int>& b) const {
-            return a.second < b.second;
+    void index_mapping(std::unordered_map<int, std::queue<int>>& map_of_indexes, const std::vector<int>& keys_seq) {
+        const size_t elems_size = keys_seq.size();
+        for (int i = 0; i < elems_size; ++i) {
+            if (map_of_indexes.find(keys_seq[i]) == map_of_indexes.end())
+                map_of_indexes[keys_seq[i]] = std::queue<int>();
+
+            map_of_indexes[keys_seq[i]].push(i);
         }
-    };
+    }
+
 };
 
 }  // namespace caches
