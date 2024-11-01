@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Primitives3D.hpp"
 #include <optional>
 #include <array>
@@ -68,6 +69,7 @@ size_t countIntersections(const std::vector<Triangle3D>& triangles)
   }
   return counter;
 }
+
 
 }
 

@@ -1,0 +1,36 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--build",
+        "${workspaceFolder}/build"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$gcc"],
+      "detail": "Build project for ARM64 architecture"
+    },
+    {
+      "label": "Build with profiling",
+      "type": "shell",
+      "command": "gcc -pg -o run_cache_ideal ${workspaceFolder}/tests/hwc/cache_ideal.cc",
+      "group": {
+          "kind": "build",
+          "isDefault": true
+      }
+    },
+    {
+      "label": "Run profiler",
+      "type": "shell",
+      "command": "./run_cache_ideal && gprof run_cache_ideal gmon.out > profile_report.txt",
+      "group": "test"
+    }
+  ]
+}
+  
