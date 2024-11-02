@@ -1,8 +1,7 @@
 enable_testing()
-include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 file(GLOB_RECURSE TEST_SOURCES gtest_*.cpp *.hpp *.h *.cc)
-SET(LIBS gtest_main CppBaseCourse)
+SET(LIBS gtest_main HomeTasks)
 add_definitions(-DPROJECT_DIR_RAW="${PROJECT_SOURCE_DIR}")
 
 foreach(TEST_FILE IN LISTS TEST_SOURCES)

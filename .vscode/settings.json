@@ -63,6 +63,18 @@
         "unordered_map": "cpp",
         "unordered_set": "cpp",
         "variant": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "cfenv": "cpp",
+        "cinttypes": "cpp",
+        "codecvt": "cpp",
+        "future": "cpp",
+        "numbers": "cpp",
+        "regex": "cpp",
+        "semaphore": "cpp",
+        "shared_mutex": "cpp",
+        "source_location": "cpp",
+        "strstream": "cpp",
+        "typeindex": "cpp",
+        "valarray": "cpp"
     }
 }

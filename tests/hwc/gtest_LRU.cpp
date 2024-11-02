@@ -1,7 +1,7 @@
-#include "src/CppBaseCourse/hwc/LRU.h"
+#include "hwc/LRU.h"
 #include "gtest/gtest.h"
-#include "tests/data/hwc/LRUTestingData.h"
-#include "tests/utils/utils.h"
+#include "../data/hwc/LRUTestingData.h"
+#include "../utils/utils.h"
 
 namespace {
 

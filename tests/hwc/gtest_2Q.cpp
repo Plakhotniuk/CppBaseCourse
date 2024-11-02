@@ -1,7 +1,7 @@
-#include "src/CppBaseCourse/hwc/2Q.h"
-#include "tests/data/hwc/2QTestingData.h"
+#include "hwc/2Q.h"
+#include "../data/hwc/2QTestingData.h"
 #include "gtest/gtest.h"
-#include "tests/utils/utils.h"
+#include "../utils/utils.h"
 
 namespace {
 

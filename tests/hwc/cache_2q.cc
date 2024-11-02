@@ -1,7 +1,7 @@
 #include <cassert>
 #include <iostream>
 
-#include "../../src/CppBaseCourse/hwc/2Q.h"
+#include "hwc/2Q.h"
 
 // slow get page imitation
 int slow_get_page_int(int key) { return key; }

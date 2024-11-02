@@ -1,7 +1,7 @@
 #include <cassert>
 #include <iostream>
 
-#include "../../src/CppBaseCourse/hwc/LRU.h"
+#include "hwc/LRU.h"
 
 // slow get page imitation
 int slow_get_page_int(int key) { return key; }
