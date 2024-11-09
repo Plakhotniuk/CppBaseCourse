@@ -1,7 +1,7 @@
 enable_testing()
 
 file(GLOB_RECURSE TEST_SOURCES gtest_*.cpp *.hpp *.h *.cc)
-SET(LIBS gtest_main HomeTasks)
+SET(LIBS gtest_main hw3d hwc)
 add_definitions(-DPROJECT_DIR_RAW="${PROJECT_SOURCE_DIR}")
 
 foreach(TEST_FILE IN LISTS TEST_SOURCES)

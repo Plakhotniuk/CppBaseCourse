@@ -19,7 +19,7 @@
     {
       "label": "Build with profiling",
       "type": "shell",
-      "command": "gcc -pg -o run_cache_ideal ${workspaceFolder}/tests/hwc/cache_ideal.cc",
+      "command": "gcc -pg -o triangles ${workspaceFolder}/tests/hw3d/triangles.cc",
       "group": {
           "kind": "build",
           "isDefault": true
@@ -28,7 +28,7 @@
     {
       "label": "Run profiler",
       "type": "shell",
-      "command": "./run_cache_ideal && gprof run_cache_ideal gmon.out > profile_report.txt",
+      "command": "./run_triangles && gprof run_triangles gmon.out > profile_report.txt",
       "group": "test"
     }
   ]

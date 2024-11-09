@@ -1,5 +1,5 @@
-#include<iostream>
-#include<cassert>
+#include <cassert>
+#include <iostream>
 #include "hw3d/Triangles3D.hpp"
 
 namespace {
