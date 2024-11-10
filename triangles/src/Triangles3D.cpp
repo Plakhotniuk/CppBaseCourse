@@ -1,6 +1,10 @@
 #include "Triangles3D.hpp"
 namespace triangles3D {
 
+    void Triangle3D::setPoint(size_t ind, const Vec3& val){
+        points_[ind] = val;
+    }
+
     std::array<Vec3, 2> Triangle3D::getTwoOtherPoints(size_t num) const 
     {
         return {points_[(num + 1) % 3], points_[(num + 2) % 3]};

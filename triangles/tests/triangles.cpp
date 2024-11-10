@@ -7,12 +7,14 @@ using namespace triangles3D;
 
 int main()
 {
-    // write from file, check with result
-    const Triangle3D tr1{{1, 1, 2}, {1, 1, 2}, {2, 2, 2}};
-    const Triangle3D tr2{{1, 1, 1}, {1, 5, 1}, {5, 1, 1}};
+    Triangle3D tr1;
+    Triangle3D tr2;
+    std::cin >> tr1 >> tr2;
+    assert (std::cin.good());
+
+    bool ref_res;
+    std::cin >> ref_res;
 
     bool result = tr1.is_intersect(tr2);
-
     std::cout << result << std::endl;
-    std::cout << "result" << std::endl;
 }

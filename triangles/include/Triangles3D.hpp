@@ -27,6 +27,13 @@ public:
 
     size_t countIntersections(const std::vector<Triangle3D>& triangles) const;
 
+    void setPoint(size_t ind, const Vec3& val);
+
+    friend std::istream &operator >> (std::istream &in, Triangle3D& triangle){
+        in >> triangle.points_[0] >> triangle.points_[1] >> triangle.points_[2];
+        return in;
+    };
+
 };
 
 }
