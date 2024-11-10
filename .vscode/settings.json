@@ -76,5 +76,6 @@
         "strstream": "cpp",
         "typeindex": "cpp",
         "valarray": "cpp"
-    }
+    },
+    "cmake.sourceDirectory": "/Users/arseniy/study/MastersDegree/1Semestr/CppBase/repo/CppBaseCourse/triangles"
 }

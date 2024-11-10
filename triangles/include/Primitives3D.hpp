@@ -51,15 +51,7 @@ public:
     void display() const {
         std::cout << "(" << x_ << ", " << y_ << ", " << z_ << ")\n";
     }
-
-    friend std::istream& operator >> (std::istream& in, Vec3& v);
 };
-
-std::istream& operator>>(std::istream& in, Vec3& v) {
-    // Read x, y, and z from the input stream
-    in >> v.x_ >> v.y_ >> v.z_;
-    return in;
-}
 
 enum class PointRelPos {
     UPSIDE,

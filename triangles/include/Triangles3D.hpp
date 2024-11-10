@@ -1,12 +1,12 @@
 #pragma once
 
 #include "Primitives3D.hpp"
-#include <optional>
 #include <array>
 
 namespace triangles3D {
 
-using namespace primitives3D;
+using Vec3 = primitives3D::Vec3;
+using Plane = primitives3D::Plane;
 
 
 class Triangle3D {
@@ -23,11 +23,9 @@ public:
 
     Plane constructPlane(size_t thirdPoint) const;
 
-    friend  std::istream &operator >> (std::istream &in, Triangle3D& triangle);
+    bool is_intersect(const Triangle3D& otherTriangle) const;
 
-    bool is_intersect(const Triangle3D& otherTriangle);
-
-    size_t countIntersections(const std::vector<Triangle3D>& triangles);
+    size_t countIntersections(const std::vector<Triangle3D>& triangles) const;
 
 };
 

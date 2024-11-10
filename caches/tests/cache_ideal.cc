@@ -1,7 +1,7 @@
 #include <cassert>
 #include <iostream>
-
-#include "hwc/LRU.h"
+#include <span>
+#include "Ideal.h"
 
 // slow get page imitation
 int slow_get_page_int(int key) { return key; }
@@ -13,15 +13,19 @@ int main() {
 
     std::cin >> m >> n;
     assert(std::cin.good());
-    caches::cache_lru<int> c{m};
+
+    std::vector<int> input;
+    input.reserve(n);
 
     for (int i = 0; i < n; ++i) {
         int q;
         std::cin >> q;
         assert(std::cin.good());
-        if (c.lookup_update(q, slow_get_page_int))
-            hits += 1;
+        input.push_back(q);
     }
+    caches::cache_ideal c(m);
+    hits = c.lookup_update(input);
+
     std::cout << hits << std::endl;
 }
 

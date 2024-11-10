@@ -1,7 +1,7 @@
 #include <cassert>
 #include <iostream>
 
-#include "hwc/2Q.h"
+#include "LRU.h"
 
 // slow get page imitation
 int slow_get_page_int(int key) { return key; }
@@ -13,7 +13,7 @@ int main() {
 
     std::cin >> m >> n;
     assert(std::cin.good());
-    caches::cache_2q<int> c{m};
+    caches::cache_lru<int> c{m};
 
     for (int i = 0; i < n; ++i) {
         int q;
@@ -24,3 +24,4 @@ int main() {
     }
     std::cout << hits << std::endl;
 }
+

@@ -1,22 +1,18 @@
 #include <cassert>
 #include <iostream>
-#include "hw3d/Triangles3D.hpp"
+#include <Triangles3D.hpp>
 
-namespace {
 
 using namespace triangles3D;
 
 int main()
 {
     // write from file, check with result
-    Triangle3D tr1;
-    Triangle3D tr2;
-    std::cin >> tr1 >> tr2;
-    assert (std::cin.good());
+    const Triangle3D tr1{{1, 1, 2}, {1, 1, 2}, {2, 2, 2}};
+    const Triangle3D tr2{{1, 1, 1}, {1, 5, 1}, {5, 1, 1}};
 
     bool result = tr1.is_intersect(tr2);
 
     std::cout << result << std::endl;
-}
-
+    std::cout << "result" << std::endl;
 }

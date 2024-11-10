@@ -1,7 +1,7 @@
-#include "hwc/2Q.h"
-#include "../data/hwc/2QTestingData.h"
+#include "2Q.h"
+#include "data/2QTestingData.h"
 #include "gtest/gtest.h"
-#include "../utils/utils.h"
+#include "utils/utils.h"
 
 namespace {
 

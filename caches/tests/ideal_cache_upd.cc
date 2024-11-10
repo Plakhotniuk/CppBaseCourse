@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 
-#include "hwc/Idealupd.h"
+#include "Idealupd.h"
 
 int main ()
 {

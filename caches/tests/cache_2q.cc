@@ -1,7 +1,7 @@
 #include <cassert>
 #include <iostream>
-#include <span>
-#include "hwc/Ideal.h"
+
+#include "2Q.h"
 
 // slow get page imitation
 int slow_get_page_int(int key) { return key; }
@@ -13,19 +13,14 @@ int main() {
 
     std::cin >> m >> n;
     assert(std::cin.good());
-
-    std::vector<int> input;
-    input.reserve(n);
+    caches::cache_2q<int> c{m};
 
     for (int i = 0; i < n; ++i) {
         int q;
         std::cin >> q;
         assert(std::cin.good());
-        input.push_back(q);
+        if (c.lookup_update(q, slow_get_page_int))
+            hits += 1;
     }
-    caches::cache_ideal c(m);
-    hits = c.lookup_update(input);
-
     std::cout << hits << std::endl;
 }
-

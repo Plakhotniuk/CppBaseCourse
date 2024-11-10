@@ -1,7 +1,7 @@
-#include "hwc/Ideal.h"
-#include "../data/hwc/IdealTestingData.h"
+#include "Ideal.h"
+#include "data/IdealTestingData.h"
 #include "gtest/gtest.h"
-#include "../utils/utils.h"
+#include "utils/utils.h"
 #include <span>
 
 namespace {

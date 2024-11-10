@@ -1,7 +1,7 @@
 #include <cassert>
 #include <iostream>
 
-#include "hw3d/Primitives3D.hpp"
+#include <Primitives3D.hpp>
 #include "gtest/gtest.h"
 
 namespace {
