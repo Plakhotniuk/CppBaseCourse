@@ -1,4 +1,4 @@
-#include <include/Triangles3D.hpp>
+#include "Triangles3D.hpp"
 namespace triangles3D {
 
     std::array<Vec3, 2> Triangle3D::getTwoOtherPoints(size_t num) const 

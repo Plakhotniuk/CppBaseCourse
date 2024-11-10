@@ -1,11 +1,11 @@
 file(GLOB_RECURSE TEST_SOURCES *.cpp *.hpp)
-SET(LIBS gtest_main)
+SET(LIBS gtest_main TrianglesLib)
 
 foreach (TEST_FILE IN LISTS TEST_SOURCES)
     get_filename_component(TEST_FILE_NAME ${TEST_FILE} NAME_WE)
     set(EXECUTABLE_NAME run_${TEST_FILE_NAME})
     add_executable(${EXECUTABLE_NAME} ${TEST_FILE})
-    target_include_directories(${EXECUTABLE_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)
+    target_include_directories(${EXECUTABLE_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/src)
     target_link_libraries(${EXECUTABLE_NAME} ${LIBS})
     message("TEST_FILE: ${TEST_FILE}")
 endforeach ()
