@@ -10,9 +10,6 @@ using Plane = primitives3D::Plane;
 
 
 class Triangle3D {
-
-    std::array<Vec3, 3> points_;
-
 public:
 
     Triangle3D() = default;
@@ -33,6 +30,14 @@ public:
         in >> triangle.points_[0] >> triangle.points_[1] >> triangle.points_[2];
         return in;
     };
+
+private:
+
+    Plane constructPlane(size_t thirdPointInd) const;
+
+private:
+
+    std::array<Vec3, 3> points_;
 
 };
 
