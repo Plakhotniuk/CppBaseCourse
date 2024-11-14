@@ -20,7 +20,7 @@ namespace triangles3D {
         const Vec3 AH = AB.normalize() * AB.dot(AC) / AB.norm();
         const Vec3 planeNormVec = (AC - AH).normalize();
 
-        return Plane(planeNormVec, A);
+        return {planeNormVec, A + AH};
     }
 
     bool Triangle3D::is_intersect(const Triangle3D& otherTriangle) const
@@ -35,12 +35,12 @@ namespace triangles3D {
             bool hasPointInHalfSpace = false;
             for(size_t j = 0; j < 3; ++j)
             {
-            const primitives3D::PointRelPos otherPointPos = plane.pointPosition(otherTriangle.points_[j]);
-            if(otherPointPos == thisPointPos)
-            {
-                hasPointInHalfSpace = true;
-                break;
-            }
+                const primitives3D::PointRelPos otherPointPos = plane.pointPosition(otherTriangle.points_[j]);
+                if(otherPointPos == thisPointPos)
+                {
+                    hasPointInHalfSpace = true;
+                    break;
+                }
             }
             if(!hasPointInHalfSpace) return false;
         }

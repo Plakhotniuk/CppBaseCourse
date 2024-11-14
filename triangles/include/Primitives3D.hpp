@@ -18,19 +18,19 @@ public:
 
     // Basic vector operations
     Vec3 operator+(const Vec3& other) const {  // Vector addition
-        return Vec3(x_ + other.x_, y_ + other.y_, z_ + other.z_);
+        return {x_ + other.x_, y_ + other.y_, z_ + other.z_};
     }
 
     Vec3 operator-(const Vec3& other) const {  // Vector subtraction
-        return Vec3(x_ - other.x_, y_ - other.y_, z_ - other.z_);
+        return {x_ - other.x_, y_ - other.y_, z_ - other.z_};
     }
 
     Vec3 operator*(const double scalar) const {       
-        return Vec3(x_ * scalar, y_ * scalar, z_ * scalar);
+        return {x_ * scalar, y_ * scalar, z_ * scalar};
     }
 
     Vec3 operator/(const double scalar) const {       
-        return Vec3(x_ / scalar, y_ / scalar, z_ / scalar);
+        return {x_ / scalar, y_ / scalar, z_ / scalar};
     }
 
     // Dot product
@@ -44,7 +44,7 @@ public:
 
     Vec3 normalize() const {
         double mag = norm();
-        return Vec3(x_ / mag, y_ / mag, z_ / mag);
+        return {x_ / mag, y_ / mag, z_ / mag};
     }
 
     // Utility function to display the vector
@@ -73,9 +73,9 @@ public:
 
     Plane(const Vec3& normVec, const Vec3& point): normVec_(normVec), planePoint_(point) {};
 
-    PointRelPos pointPosition(const Vec3& point) const {
+    [[nodiscard]] PointRelPos pointPosition(const Vec3& point) const {
         const auto res = (point - planePoint_).dot(normVec_);
-        return res > 0 ? PointRelPos::UPSIDE : PointRelPos::DOWNSIDE;
+        return res >= 0 ? PointRelPos::UPSIDE : PointRelPos::DOWNSIDE;
     }
 };
 

@@ -15,17 +15,17 @@ class Triangle3D {
 
 public:
 
-    Triangle3D() {};
+    Triangle3D() = default;
 
     Triangle3D(const Vec3& vec1, const Vec3& vec2, const Vec3& vec3): points_{vec1, vec2, vec3} {};
 
-    std::array<Vec3, 2> getTwoOtherPoints(size_t num) const;
+    [[nodiscard]] std::array<Vec3, 2> getTwoOtherPoints(size_t num) const;
 
-    Plane constructPlane(size_t thirdPoint) const;
+    [[nodiscard]] Plane constructPlane(size_t thirdPoint) const;
 
-    bool is_intersect(const Triangle3D& otherTriangle) const;
+    [[nodiscard]] bool is_intersect(const Triangle3D& otherTriangle) const;
 
-    size_t countIntersections(const std::vector<Triangle3D>& triangles) const;
+    [[nodiscard]] size_t countIntersections(const std::vector<Triangle3D>& triangles) const;
 
     void setPoint(size_t ind, const Vec3& val);
 

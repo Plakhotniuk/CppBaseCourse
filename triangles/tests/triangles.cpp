@@ -12,9 +12,6 @@ int main()
     std::cin >> tr1 >> tr2;
     assert (std::cin.good());
 
-    bool ref_res;
-    std::cin >> ref_res;
-
     bool result = tr1.is_intersect(tr2);
     std::cout << result << std::endl;
 }
