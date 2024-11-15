@@ -10,9 +10,9 @@ namespace primitives3D {
 
 class Vec3 {
     double x_, y_, z_;
-    const double tolerance = std::numeric_limits<double>::epsilon();
 
 public:
+    constexpr static double tolerance = std::numeric_limits<double>::epsilon();
     // Constructors
     Vec3() : x_(0), y_(0), z_(0) {}               
     Vec3(double x, double y, double z) : x_(x), y_(y), z_(z) {} 
@@ -75,6 +75,7 @@ public:
 enum class PointRelPos {
     UPSIDE,
     DOWNSIDE,
+    INPLANE
 };
 
 class Plane {
@@ -88,11 +89,18 @@ public:
 
     [[nodiscard]] PointRelPos pointPosition(const Vec3& point) const {
         const auto res = (point - planePoint_).dot(normVec_);
-        return res >= 0 ? PointRelPos::UPSIDE : PointRelPos::DOWNSIDE;
+
+        if(res > Vec3::tolerance) 
+            return PointRelPos::UPSIDE;
+
+        if(std::abs(res) <= Vec3::tolerance) 
+            return PointRelPos::INPLANE;
+
+        return PointRelPos::DOWNSIDE;
     }
 };
 
-Plane inline formTreePoints(const Vec3& A, const Vec3& B, const Vec3& C)
+Plane static inline formTreePoints(const Vec3& A, const Vec3& B, const Vec3& C)
 {
     const Vec3 AB = B - A;
     const Vec3 AC = C - A;

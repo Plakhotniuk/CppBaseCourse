@@ -36,7 +36,8 @@ namespace triangles3D {
             bool hasPointInHalfSpace = false;
             for(size_t j = 0; j < 3; ++j)
             {
-                if(plane.pointPosition(otherTriangle.points_[j]) == thisPointPos)
+                const auto otherPointPos = plane.pointPosition(otherTriangle.points_[j]);
+                if(otherPointPos == thisPointPos || otherPointPos == primitives3D::PointRelPos::INPLANE)
                 {
                     hasPointInHalfSpace = true;
                     break;
@@ -51,7 +52,9 @@ namespace triangles3D {
         for(size_t i = 0; i < 3; ++i)
         {
             auto otherPointPos = trianglePlane.pointPosition(otherTriangle.points_[i]);
-            if(otherPointPos == primitives3D::PointRelPos::UPSIDE) 
+            if (otherPointPos == primitives3D::PointRelPos::INPLANE)
+                return true;
+            else if(otherPointPos == primitives3D::PointRelPos::UPSIDE) 
                 hasPointUpside = true;
             else
                 hasPointDownside = true;
