@@ -18,11 +18,11 @@ public:
 
     [[nodiscard]] std::array<Vec3, 2> getTwoOtherPoints(size_t num) const;
 
-    [[nodiscard]] Plane constructPlane(size_t thirdPoint) const;
-
     [[nodiscard]] bool is_intersect(const Triangle3D& otherTriangle) const;
 
     [[nodiscard]] size_t countIntersections(const std::vector<Triangle3D>& triangles) const;
+
+    Plane toPlane(const size_t point_ind) const;
 
     void setPoint(size_t ind, const Vec3& val);
 

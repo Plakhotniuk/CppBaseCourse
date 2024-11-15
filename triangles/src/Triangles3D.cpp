@@ -1,4 +1,5 @@
 #include "Triangles3D.hpp"
+
 namespace triangles3D {
 
     void Triangle3D::setPoint(size_t ind, const Vec3& val){
@@ -18,6 +19,11 @@ namespace triangles3D {
         return {planeNormVec, A + AH};
     }
 
+    Plane Triangle3D::toPlane(const size_t point_ind) const 
+    {
+        return primitives3D::formTreePoints(points_[point_ind], points_[(point_ind + 1) % 3], points_[(point_ind + 2) % 3]);
+    }
+
     bool Triangle3D::is_intersect(const Triangle3D& otherTriangle) const
     {
         // for point in thisTriangle.points
@@ -30,7 +36,7 @@ namespace triangles3D {
             bool hasPointInHalfSpace = false;
             for(size_t j = 0; j < 3; ++j)
             {
-                if(auto otherPointPos = plane.pointPosition(otherTriangle.points_[j]); otherPointPos == thisPointPos)
+                if(plane.pointPosition(otherTriangle.points_[j]) == thisPointPos)
                 {
                     hasPointInHalfSpace = true;
                     break;
@@ -39,13 +45,18 @@ namespace triangles3D {
             if(!hasPointInHalfSpace) return false;
         }
 
-
-
+        const Plane trianglePlane = toPlane(0);
+        bool hasPointUpside = false;
+        bool hasPointDownside = false;
         for(size_t i = 0; i < 3; ++i)
         {
-
+            auto otherPointPos = trianglePlane.pointPosition(otherTriangle.points_[i]);
+            if(otherPointPos == primitives3D::PointRelPos::UPSIDE) 
+                hasPointUpside = true;
+            else
+                hasPointDownside = true;
         }
-        return true;
+        return hasPointUpside && hasPointDownside;
     }
 
     size_t Triangle3D::countIntersections(const std::vector<Triangle3D>& triangles) const

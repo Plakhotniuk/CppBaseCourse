@@ -5,23 +5,24 @@
 #include <iostream>
 #include <vector>
 
-namespace primitives3D {
 
+namespace primitives3D {
 
 class Vec3 {
     double x_, y_, z_;
+    const double tolerance = std::numeric_limits<double>::epsilon();
 
 public:
     // Constructors
-    Vec3() : x_(0), y_(0), z_(0) {}               // Default constructor
-    Vec3(double x, double y, double z) : x_(x), y_(y), z_(z) {} // Parameterized constructor
+    Vec3() : x_(0), y_(0), z_(0) {}               
+    Vec3(double x, double y, double z) : x_(x), y_(y), z_(z) {} 
 
     // Basic vector operations
-    Vec3 operator+(const Vec3& other) const {  // Vector addition
+    Vec3 operator+(const Vec3& other) const {  
         return {x_ + other.x_, y_ + other.y_, z_ + other.z_};
     }
 
-    Vec3 operator-(const Vec3& other) const {  // Vector subtraction
+    Vec3 operator-(const Vec3& other) const {  
         return {x_ - other.x_, y_ - other.y_, z_ - other.z_};
     }
 
@@ -33,9 +34,17 @@ public:
         return {x_ / scalar, y_ / scalar, z_ / scalar};
     }
 
-    // Dot product
     double dot(const Vec3& other) const {
         return x_ * other.x_ + y_ * other.y_ + z_ * other.z_;
+    }
+
+    Vec3 cross(const Vec3& other) const 
+    {
+        return {
+            y_ * other.z_ - z_ * other.y_,
+            z_ * other.x_ - x_ * other.z_,
+            x_ * other.y_ - y_ * other.x_,
+        };
     }
 
     double norm() const {
@@ -47,7 +56,11 @@ public:
         return {x_ / mag, y_ / mag, z_ / mag};
     }
 
-    // Utility function to display the vector
+    bool isEqual(const Vec3& other)
+    {
+        return std::abs(x_ - other.x_) < tolerance && std::abs(y_ - other.y_) < tolerance && std::abs(z_ - other.z_) < tolerance;
+    }
+
     void display() const {
         std::cout << "(" << x_ << ", " << y_ << ", " << z_ << ")\n";
     }
@@ -78,5 +91,14 @@ public:
         return res >= 0 ? PointRelPos::UPSIDE : PointRelPos::DOWNSIDE;
     }
 };
+
+Plane inline formTreePoints(const Vec3& A, const Vec3& B, const Vec3& C)
+{
+    const Vec3 AB = B - A;
+    const Vec3 AC = C - A;
+    const Vec3 n = (AC.cross(AB)).normalize();
+
+    return {n, A};
+}
 
 }
