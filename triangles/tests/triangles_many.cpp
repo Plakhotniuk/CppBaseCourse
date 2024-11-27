@@ -23,6 +23,7 @@ int main()
         tr_vec.emplace_back(tr);
     }
 
-    const size_t result = countIntersections(tr_vec);
-    std::cout << result << std::endl;
+    const auto result = getIntersectTriangles(tr_vec);
+    for (const auto& elem : result)
+        std::cout << elem << ' ';
 }

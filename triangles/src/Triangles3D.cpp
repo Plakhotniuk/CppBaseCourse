@@ -1,4 +1,5 @@
 #include "Triangles3D.hpp"
+#include <set>
 
 namespace triangles3D {
 
@@ -62,17 +63,20 @@ namespace triangles3D {
         return hasPointUpside && hasPointDownside;
     }
 
-size_t countIntersections(const std::vector<Triangle3D>& triangles)
+std::set<size_t> getIntersectTriangles(const std::vector<Triangle3D>& triangles)
 {
-    size_t counter = 0;
     const size_t vecSize = triangles.size();
+    std::set<size_t> tr_nums;
     for(size_t i = 0; i < vecSize - 1; ++i)
     {
         for(size_t j = i + 1; j < vecSize; ++j)
             if(triangles[i].is_intersect(triangles[j])) 
-                ++counter;
+            {
+                tr_nums.insert(i);
+                tr_nums.insert(j);
+            }
     }
-    return counter;
+    return tr_nums;
 }    
 
 }

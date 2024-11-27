@@ -2,6 +2,7 @@
 
 #include "Primitives3D.hpp"
 #include <array>
+#include <set>
 
 namespace triangles3D {
 
@@ -39,6 +40,6 @@ private:
 
 };
 
-size_t countIntersections(const std::vector<Triangle3D>& triangles);
+std::set<size_t> getIntersectTriangles(const std::vector<Triangle3D>& triangles);
 
 }
