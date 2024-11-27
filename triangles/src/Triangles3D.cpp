@@ -62,16 +62,17 @@ namespace triangles3D {
         return hasPointUpside && hasPointDownside;
     }
 
-    size_t Triangle3D::countIntersections(const std::vector<Triangle3D>& triangles) const
+size_t countIntersections(const std::vector<Triangle3D>& triangles)
+{
+    size_t counter = 0;
+    const size_t vecSize = triangles.size();
+    for(size_t i = 0; i < vecSize - 1; ++i)
     {
-        size_t counter = 0;
-        const size_t vecSize = triangles.size();
-        for(size_t i = 0; i < vecSize - 1; ++i)
-        {
-            for(size_t j = i + 1; j < vecSize; ++j)
-                if(is_intersect(triangles[j])) ++counter;
-        }
-        return counter;
+        for(size_t j = i + 1; j < vecSize; ++j)
+            if(triangles[i].is_intersect(triangles[j])) 
+                ++counter;
     }
+    return counter;
+}    
 
 }

@@ -20,8 +20,6 @@ public:
 
     [[nodiscard]] bool is_intersect(const Triangle3D& otherTriangle) const;
 
-    [[nodiscard]] size_t countIntersections(const std::vector<Triangle3D>& triangles) const;
-
     Plane toPlane(const size_t point_ind) const;
 
     void setPoint(size_t ind, const Vec3& val);
@@ -40,5 +38,7 @@ private:
     std::array<Vec3, 3> points_;
 
 };
+
+size_t countIntersections(const std::vector<Triangle3D>& triangles);
 
 }
