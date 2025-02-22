@@ -3,7 +3,8 @@
 
 namespace triangles3D {
 
-    void Triangle3D::setPoint(size_t ind, const Vec3& val){
+    void Triangle3D::setPoint(size_t ind, const Vec3& val)
+    {
         points_[ind] = val;
     }
 
@@ -70,11 +71,13 @@ std::set<size_t> getIntersectTriangles(const std::vector<Triangle3D>& triangles)
     for(size_t i = 0; i < vecSize - 1; ++i)
     {
         for(size_t j = i + 1; j < vecSize; ++j)
+        {
             if(triangles[i].is_intersect(triangles[j])) 
             {
                 tr_nums.insert(i);
                 tr_nums.insert(j);
             }
+        }
     }
     return tr_nums;
 }    

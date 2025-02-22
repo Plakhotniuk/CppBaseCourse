@@ -1,7 +1,7 @@
 #include "2Q.h"
 #include "data/2QTestingData.h"
 #include "gtest/gtest.h"
-#include "utils/utils.h"
+#include <utils/utils.h>
 
 namespace {
 
