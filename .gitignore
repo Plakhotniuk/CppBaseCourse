@@ -6,7 +6,9 @@ cmake-build*/
 # IDEs
 .idea/
 .vs/
-.vscode/
+.vscode
+.vscode/launch.json
+.vscode/tasks.json
 
 # Mac
 .DS_Store
